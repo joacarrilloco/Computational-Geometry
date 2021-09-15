@@ -237,6 +237,51 @@ vector<Point> ConvexH(vector<Point> P){
     return H;
 }
 
+enum {IN,OUT,ON};
+
+int point_in_polygon( vector< pt > &pol, pt &p )
+{
+  int wn = 0;
+  for( int i = 0, n = pol.size(); i < n; ++ i )
+  {
+    long long c = orient( p, pol[i], pol[(i+1)%n] );
+    if( c == 0 && dot( pol[i] - p, pol[(i+1)%n] - p ) <= 0 ) return ON; 
+    if( c > 0 && pol[i].y <= p.y && pol[(i+1)%n].y > p.y ) ++ wn;
+    if( c < 0 && pol[(i+1)%n].y <= p.y && pol[i].y > p.y ) --wn;
+  }
+  return wn ? IN : OUT;
+}
+
+bool insideConvexPol( vector < pt > &pol, pt &p ){
+    int low = 1, high = pol.size() - 1;
+    while( high - low > 1 ){
+        int mid = ( high + low ) / 2;
+        if( orient( pol[0], pol[mid], p ) >= 0 ) low = mid;
+        else high = mid;
+    }
+    if( orient( pol[0], pol[low], p ) < 0 ) return false;
+    if( orient( pol[low], pol[high], p ) < 0 ) return false;
+    if( orient( pol[high], pol[0], p ) < 0 ) return false;
+    return true;    
+}
+
+lf areaOfIntersectionOfTwoCircles( lf r1, lf r2, lf d )
+{
+  if( d >= r1 + r2 )
+    return 0.0L;
+
+  if( d <= fabsl( r2 - r1 ) )
+    return PI * ( r1 < r2 ? r1 * r1 : r2 * r2 );
+
+  lf alpha = safeAcos( ( r1 * r1 - r2 * r2 + d * d ) / ( 2.0L * d * r1 ) );
+  lf betha = safeAcos( ( r2 * r2 - r1 * r1 + d * d ) / ( 2.0L * d * r2 ) );
+
+  lf a1 = r1 * r1 * ( alpha - sinl( alpha ) * cosl( alpha ) );
+  lf a2 = r2 * r2 * ( betha - sinl( betha ) * cosl( betha ) );
+
+  return a1 + a2;
+};
+
 int main()
 {
     return 0;
