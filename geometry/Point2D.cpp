@@ -24,13 +24,13 @@ namespace geometry
 	template<typename T>
 	Point2D<T> Point2D<T>::operator + ( const Point2D<T> &p ) const
 	{
-		return Point2D( x + p.x, y + p.y );
+		return Point2D<T>( x + p.x, y + p.y );
 	}
 
 	template<typename T>
 	Point2D<T> Point2D<T>::operator - ( const Point2D<T> &p ) const
 	{
-		return Point2D( x - p.x, y - p.y );
+		return Point2D<T>( x - p.x, y - p.y );
 	}
 
 	template<typename T>
